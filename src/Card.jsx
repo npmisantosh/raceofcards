@@ -1,8 +1,8 @@
 import React from "react";
 
-function Card() {
+function Card(data) {
   return (
-    <div>
+    <div className="card">
       <div id="number">A</div>
       <div id="shape">Hearts</div>
     </div>
