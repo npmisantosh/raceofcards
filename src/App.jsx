@@ -104,7 +104,9 @@ function App() {
 
   return (
     <>
-      <div onClick={hit}>Hit</div>
+      <div className="" onClick={hit}>
+        Hit
+      </div>
       <div className="slots-container">
         {shapes.map((shape) => {
           return <Card key={shape} data={shape} cards={drawn} />;

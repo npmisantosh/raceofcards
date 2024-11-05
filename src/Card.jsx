@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 function Card(props) {
   //init to var
-  const suits = props.shape;
+  const suits = props.data;
   const arrayCheck = props.cards.filter((item) => item.suit == suits);
   //figure out which card is being send so i can set symbol accordingly
 
@@ -11,7 +11,7 @@ function Card(props) {
       <div className="cards_container">
         <div className="card">
           <div id="number">A</div>
-          <div id="shape">{props.length}</div>
+          <div id="shape">{props.data}</div>
         </div>
         {arrayCheck.map((item) => {
           return (
