@@ -1,14 +1,20 @@
 .card {
   background-color: red;
-  width: 2%;
-  height: 2%;
+  width: 50px;
+  height: 30px;
   border-radius: 10%;
   border: 3px solid white;
   display: flex;
   flex-direction: column;
   color: white;
 }
+
 .slots-container {
   display: flex;
   flex-direction: row;
+}
+
+.cards_container {
+  display: flex;
+  flex-direction: column;
 }

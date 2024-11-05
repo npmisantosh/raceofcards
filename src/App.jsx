@@ -1,12 +1,10 @@
 import "./App.css";
 import Card from "./Card";
 import { useState } from "react";
-import Slots from "./Slots";
 
 function App() {
   const deck = [];
-  let drawn = [];
-
+  const shapes = ["h", "s", "d", "c"];
   const createDeck = () => {
     const numbers = [
       "joker",
@@ -23,7 +21,7 @@ function App() {
       "12",
       "13",
     ];
-    const shapes = ["h", "s", "d", "c"];
+
     for (let shape of shapes) {
       for (let num of numbers) {
         deck.push({ number: num, suit: shape });
@@ -32,36 +30,46 @@ function App() {
   };
   createDeck();
 
-  const [card, setCard] = useState();
+  const [check, setCheck] = useState(false);
   const [heart, setHeart] = useState(0);
   const [spade, setSpade] = useState(0);
   const [diamond, setDiamond] = useState(0);
   const [clubs, setClubs] = useState(0);
+  const [drawn, setdrawn] = useState([]);
 
   //randomizer function
   const getRandom = (item) => {
     return item[Math.floor(Math.random() * item.length)];
   };
+  //adds score to check for win
+  const winCondition = (suit) => {
+    suit === "h"
+      ? setHeart((prev) => prev + 1)
+      : suit === "c"
+      ? setClubs((prev) => prev + 1)
+      : suit === "d"
+      ? setDiamond((prev) => prev + 1)
+      : setSpade((prev) => prev + 1);
+  };
 
   //draw until new object appears
   const recurssiveCheck = () => {
     let picked = getRandom(deck);
-    if (!drawn.includes(picked)) {
-      console.log(`when not true`, picked);
-      //drawn.push({ number: picked.number, suit: picked.suit });
-      drawn = [...drawn, picked];
-      console.log(typeof drawn, drawn);
-      picked.suit === "h"
-        ? setHeart((prev) => prev + 1)
-        : picked.suit === "c"
-        ? setClubs((prev) => prev + 1)
-        : picked.suit === "d"
-        ? setDiamond((prev) => prev + 1)
-        : setSpade((prev) => prev + 1);
-      return picked;
+    //console.log("yo chai randomly leko", picked);
+    if (
+      drawn.some(
+        (card) => card.suit === picked.suit && card.number === picked.number
+      )
+    ) {
+      console.log(`when true`, picked);
+      recurssiveCheck();
+    } else {
+      winCondition(picked.suit);
+
+      setdrawn((drawn) => {
+        return [...drawn, picked];
+      });
     }
-    console.log(`when true`, picked);
-    recurssiveCheck();
   };
 
   //logic
@@ -69,23 +77,39 @@ function App() {
     if (heart === 12 || spade === 12 || diamond === 12 || clubs === 12) {
       console.log(
         `h`,
-        drawn.filter((item) => item.suit != "h")
+        drawn.filter((item) => item.suit == "h")
       );
-      console.log(drawn);
       console.log("won");
     } else {
       recurssiveCheck();
     }
+
+    console.log(
+      "h drawn : ",
+      drawn.filter((item) => item.suit == "h")
+    );
+    console.log(
+      "d drawn : ",
+      drawn.filter((item) => item.suit == "d")
+    );
+    console.log(
+      "s drawn : ",
+      drawn.filter((item) => item.suit == "s")
+    );
+    console.log(
+      "c drawn : ",
+      drawn.filter((item) => item.suit == "c")
+    );
   };
 
   return (
     <>
-      <div className="slots-container">
-        <Card data={drawn} />
-      </div>
       <div onClick={hit}>Hit</div>
-      {deck.map((item) => {})}
-      <Card data={card} />
+      <div className="slots-container">
+        {shapes.map((shape) => {
+          return <Card key={shape} data={shape} cards={drawn} />;
+        })}
+      </div>
     </>
   );
 }
